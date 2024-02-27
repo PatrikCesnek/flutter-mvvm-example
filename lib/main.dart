@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:mvvm_flutter/ViewModel/posts_view_model.dart';
 import 'package:mvvm_flutter/View/posts_view.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return ChangeNotifierProvider<PostsViewModel>(
+      create: (context) => PostsViewModel(),
+      child: MaterialApp(
         title: 'Flutter MVVM Demo',
         debugShowCheckedModeBanner: false,
-        initialRoute: "/",
-        routes: {
-          '/': (context) => PostView(viewModel: PostsViewModel(),),
-        },
+        home: Consumer<PostsViewModel>(
+          builder: (context, viewModel, _) => PostView(viewModel: viewModel),
+        ),
+      ),
     );
   }
 }

@@ -32,19 +32,24 @@ class _PostViewState extends State<PostView> {
       if(widget.viewModel.error == null) {
         return Scaffold(
           appBar: AppBar(
-            title: Text('Posts ${widget.viewModel.posts.length}'),
+            title: Text('Posts'),
           ),
-          body: ListView.builder(
-            itemCount: widget.viewModel.posts.length,
-            itemBuilder: (context, index) {
-              final post = widget.viewModel.posts[index];
-              return Card(
-                child: ListTile(
-                  title: Text(post.title),
-                  subtitle: Text(post.body),
-                ),
-              );
-            },
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ListView.builder(
+              itemCount: widget.viewModel.posts.length,
+              itemBuilder: (context, index) {
+                final post = widget.viewModel.posts[index];
+                return Card(
+                  color: Colors.white,
+                  margin: EdgeInsets.all(10),
+                  child: ListTile(
+                    title: Text(post.title),
+                    subtitle: Text(post.body),
+                  ),
+                );
+              },
+            ),
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () => widget.viewModel.fetchPosts(),

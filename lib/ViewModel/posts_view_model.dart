@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../Model/post.dart';
 import 'package:http/http.dart' as http;
 
-class PostsViewModel {
+class PostsViewModel extends ChangeNotifier {
   bool isLoading = false;
   String? error;
   List<Post> _posts = [];
@@ -11,11 +13,8 @@ class PostsViewModel {
 
   Future<void> fetchPosts() async {
     isLoading = true;
-    print("Should start loading... result is: ${isLoading}");
-    _posts = await _fetchPostsFromApi();
-
+    await _fetchPostsFromApi();
     isLoading = false;
-    print("Should stop loading... result is: ${isLoading}");
   }
 
   Future<List<Post>> _fetchPostsFromApi() async {
@@ -23,14 +22,10 @@ class PostsViewModel {
       final response = await http.get(Uri.parse('https://jsonplaceholder.typicode.com/posts'));
 
       final List<dynamic> data = json.decode(response.body);
-      //TODO: Delete the print statement!!
-      print(data);
-      return data.map((json) => Post(
-          userId: json['userId'],
-          id: json['id'],
-          title: json['title'],
-          body: json['body']
-      )).toList();
+      List<Post> posts = data.map((json) => Post.fromJson(json)).toList();
+      _posts = posts;
+      notifyListeners(); // Notify listeners after updating data
+      return _posts;
     } catch (e) {
       error = e.toString();
       throw Exception('Failed to load posts');
