@@ -1,10 +1,10 @@
-class Posts {
+class Post {
   int userId;
   int id;
   String title;
   String body;
 
-  Posts({
+  Post({
     required this.userId,
     required this.id,
     required this.title,
