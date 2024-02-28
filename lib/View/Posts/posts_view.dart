@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mvvm_flutter/View/Posts/posts_detail_view.dart';
 import 'package:mvvm_flutter/View/SubViews/ErrorView.dart';
-import 'package:mvvm_flutter/ViewModel/posts_view_model.dart';
+import 'package:mvvm_flutter/ViewModel/Posts/posts_view_model.dart';
 
 class PostView extends StatefulWidget {
   final PostsViewModel viewModel;
@@ -13,7 +14,6 @@ class PostView extends StatefulWidget {
 }
 
 class _PostViewState extends State<PostView> {
-
   @override
   void initState() {
     super.initState();
@@ -37,6 +37,7 @@ class _PostViewState extends State<PostView> {
         return Scaffold(
           appBar: AppBar(
             title: Text('Posts'),
+            centerTitle: true,
           ),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -48,8 +49,17 @@ class _PostViewState extends State<PostView> {
                   color: Colors.white,
                   margin: EdgeInsets.all(10),
                   child: ListTile(
+                    onTap: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PostsDetailView(
+                              detailText: widget.viewModel.posts[index].body
+                          ),
+                        ),
+                      );
+                    },
                     title: Text(post.title),
-                    subtitle: Text(post.body),
                   ),
                 );
               },

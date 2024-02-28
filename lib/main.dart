@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mvvm_flutter/ViewModel/posts_view_model.dart';
-import 'package:mvvm_flutter/View/posts_view.dart';
+import 'package:mvvm_flutter/ViewModel/Posts/posts_view_model.dart';
+import 'package:mvvm_flutter/View/Posts/posts_view.dart';
 import 'package:provider/provider.dart';
 
 void main() {
