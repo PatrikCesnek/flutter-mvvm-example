@@ -22,8 +22,12 @@ class _PostViewState extends State<PostView> {
 
   @override
   Widget build(BuildContext context) {
+
     if (widget.viewModel.isLoading) {
       return Scaffold(
+        appBar: AppBar(
+          title: Text("Posts"),
+        ),
         body: Center(
           child: CircularProgressIndicator(),
         ),
@@ -51,13 +55,12 @@ class _PostViewState extends State<PostView> {
               },
             ),
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () => widget.viewModel.fetchPosts(),
-            child: Icon(Icons.refresh),
-          ),
         );
       } else {
-        return ErrorView(error: widget.viewModel.error);
+        return ErrorView(
+          error: widget.viewModel.error,
+          tryAgain: widget.viewModel.reloadPosts,
+        );
       }
     }
   }
