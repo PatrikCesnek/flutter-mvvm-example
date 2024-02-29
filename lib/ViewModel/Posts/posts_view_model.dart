@@ -4,19 +4,21 @@ import '../../Model/Post/post.dart';
 import 'package:http/http.dart' as http;
 
 class PostsViewModel extends ChangeNotifier {
-  bool isLoading = false;
+  bool _isLoading = false;
   String? error;
   List<Post> _posts = [];
 
   List<Post> get posts => _posts;
+  bool get isLoading => _isLoading;
 
   Future<void> fetchPosts() async {
+    _isLoading = true;
+    notifyListeners();
     await _fetchPostsFromApi();
   }
 
   Future<List<Post>> _fetchPostsFromApi() async {
     try {
-      isLoading = true;
       final response = await http.get(Uri.parse('https://jsonplaceholder.typicode.com/posts'));
 
       if (response.statusCode == 200) {
@@ -24,15 +26,17 @@ class PostsViewModel extends ChangeNotifier {
         List<Post> posts = data.map((json) => Post.fromJson(json)).toList();
         _posts = posts;
         notifyListeners();
-        isLoading = false;
+        _isLoading = false;
+        notifyListeners();
         return _posts;
       } else {
-        isLoading = false;
-        error = 'Failed to load posts: ${response.statusCode}';
-        throw Exception('Failed to load posts: ${response.statusCode}');
+        _isLoading = false;
+        error = 'Failed to load posts';
+        notifyListeners();
+        throw Exception('Failed to load posts');
       }
     } catch (e) {
-      isLoading = false;
+      _isLoading = false;
       error = e.toString();
       notifyListeners();
       throw Exception('Failed to load posts');
@@ -41,7 +45,9 @@ class PostsViewModel extends ChangeNotifier {
 
   Future<void> reloadPosts() async {
     try {
+      _isLoading = true;
       error = null;
+      notifyListeners();
       await fetchPosts();
     } catch (e) {
       error = e.toString();
